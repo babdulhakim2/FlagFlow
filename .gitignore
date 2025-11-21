@@ -1,0 +1,9 @@
+minerva/
+minerva/*
+/minerva
+node_modules
+venv
+.next
+*.pyc
+.env
+.DS_Store

@@ -1,0 +1,37 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body, #__next {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.react-flow__node {
+  cursor: pointer;
+}
+
+.react-flow__node-orchestrator {
+  background: linear-gradient(135deg, #3b82f6, #1e40af);
+  border: 2px solid #1e40af;
+}
+
+.react-flow__node-osint {
+  background: linear-gradient(135deg, #f97316, #ea580c);
+  border: 2px solid #ea580c;
+}
+
+.react-flow__node-geo {
+  background: linear-gradient(135deg, #10b981, #059669);
+  border: 2px solid #059669;
+}
+
+.react-flow__node-pattern {
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+  border: 2px solid #7c3aed;
+}
