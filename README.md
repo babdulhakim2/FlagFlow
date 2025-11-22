@@ -131,7 +131,7 @@ FlagFlow/
 
 3. Observe OSINT agent discovering sanctions hits
 
-4. See geographic visualization of offshore routing (Miami → Cayman → Cyprus)
+4. See geographic visualization of offshore routing (A → B → C)
 
 5. Upload second batch to demonstrate learning:
    - System recox gnizes patterns from memory
@@ -147,12 +147,5 @@ FlagFlow/
 - **AI**: Claude Sonnet for agent reasoning
 
 
-
-## Performance Metrics
-
-- Initial investigation: ~8 seconds
-- Learned investigation: ~3 seconds
-- False positive reduction: 40% after 100 cases
-- Pattern recognition accuracy: 95% for known typologies
 
 ---
