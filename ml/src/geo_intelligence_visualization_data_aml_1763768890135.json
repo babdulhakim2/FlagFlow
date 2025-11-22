@@ -1,0 +1,322 @@
+{
+  "case_id": "aml_1763768890135",
+  "analysis_date": "2025-11-21",
+  "criminal_wallet": "bc1qm34lsc65zpw79lxes69zkqmk6ee3ewf0j77s3h",
+  "estimated_proceeds": "$1.8B+",
+  "visualization_data": {
+    "nodes": [
+      {
+        "id": "cash_placement_us",
+        "label": "Cash Placement - United States",
+        "type": "placement",
+        "coordinates": {
+          "lat": 39.8283,
+          "lng": -98.5795
+        },
+        "risk_level": "high",
+        "risk_score": 85,
+        "description": "Primary cash deposit locations - multiple metropolitan areas",
+        "estimated_volume": "$50M+ daily",
+        "indicators": [
+          "Daily deposits under $10,000",
+          "Multiple branch networks",
+          "Cash-intensive business areas",
+          "CTR avoidance pattern"
+        ]
+      },
+      {
+        "id": "cash_placement_mexico",
+        "label": "Cash Placement - Mexico Border Region",
+        "type": "placement_secondary",
+        "coordinates": {
+          "lat": 25.6866,
+          "lng": -100.3161
+        },
+        "risk_level": "medium_high",
+        "risk_score": 75,
+        "description": "Secondary cash placement via border operations",
+        "estimated_volume": "$10M+ daily",
+        "indicators": [
+          "Cross-border cash transport",
+          "Weak AML enforcement",
+          "Remittance network abuse",
+          "Cartel infrastructure potential"
+        ]
+      },
+      {
+        "id": "cex_conversion_malta",
+        "label": "CEX Conversion - Malta",
+        "type": "layering",
+        "coordinates": {
+          "lat": 35.9375,
+          "lng": 14.3754
+        },
+        "risk_level": "critical",
+        "risk_score": 95,
+        "description": "Cryptocurrency exchange conversion hub",
+        "estimated_volume": "$100M+ monthly",
+        "indicators": [
+          "Weak regulatory oversight",
+          "Crypto-friendly jurisdiction",
+          "Limited KYC requirements",
+          "Regulatory arbitrage"
+        ]
+      },
+      {
+        "id": "cex_conversion_seychelles",
+        "label": "CEX Conversion - Seychelles",
+        "type": "layering",
+        "coordinates": {
+          "lat": -4.6796,
+          "lng": 55.4920
+        },
+        "risk_level": "critical",
+        "risk_score": 98,
+        "description": "Offshore cryptocurrency exchange operations",
+        "estimated_volume": "$75M+ monthly",
+        "indicators": [
+          "Offshore secrecy jurisdiction",
+          "Minimal reporting requirements",
+          "Limited international cooperation",
+          "Privacy-focused exchange services"
+        ]
+      },
+      {
+        "id": "cex_conversion_cayman",
+        "label": "CEX Conversion - Cayman Islands",
+        "type": "layering",
+        "coordinates": {
+          "lat": 19.3133,
+          "lng": -81.2546
+        },
+        "risk_level": "critical",
+        "risk_score": 92,
+        "description": "Caribbean financial center conversion point",
+        "estimated_volume": "$50M+ monthly",
+        "indicators": [
+          "Tax haven jurisdiction",
+          "Financial secrecy laws",
+          "Crypto exchange incorporation",
+          "Limited transparency"
+        ]
+      },
+      {
+        "id": "criminal_wallet",
+        "label": "Criminal Wallet Accumulation",
+        "type": "integration",
+        "coordinates": {
+          "lat": 0,
+          "lng": 0
+        },
+        "risk_level": "critical",
+        "risk_score": 100,
+        "description": "Confirmed criminal Bitcoin wallet",
+        "estimated_volume": "$1.8B+ total",
+        "wallet_address": "bc1qm34lsc65zpw79lxes69zkqmk6ee3ewf0j77s3h",
+        "indicators": [
+          "Confirmed criminal proceeds",
+          "Institutional-scale holdings",
+          "Advanced technical sophistication",
+          "Global distribution capability"
+        ]
+      }
+    ],
+    "flows": [
+      {
+        "id": "flow_1",
+        "source": "cash_placement_us",
+        "target": "cex_conversion_malta",
+        "type": "cash_to_crypto",
+        "risk_assessment": "high",
+        "estimated_amount": "$50M+ monthly",
+        "method": "Wire transfer to exchange",
+        "detection_difficulty": "medium",
+        "description": "Primary cash-to-crypto conversion route"
+      },
+      {
+        "id": "flow_2",
+        "source": "cash_placement_us",
+        "target": "cex_conversion_seychelles",
+        "type": "cash_to_crypto",
+        "risk_assessment": "critical",
+        "estimated_amount": "$30M+ monthly",
+        "method": "Wire transfer to offshore exchange",
+        "detection_difficulty": "high",
+        "description": "High-risk offshore conversion route"
+      },
+      {
+        "id": "flow_3",
+        "source": "cash_placement_mexico",
+        "target": "cex_conversion_cayman",
+        "type": "cash_to_crypto",
+        "risk_assessment": "high",
+        "estimated_amount": "$20M+ monthly",
+        "method": "Cross-border wire to Caribbean exchange",
+        "detection_difficulty": "high",
+        "description": "Cross-border conversion route"
+      },
+      {
+        "id": "flow_4",
+        "source": "cex_conversion_malta",
+        "target": "criminal_wallet",
+        "type": "crypto_transfer",
+        "risk_assessment": "critical",
+        "estimated_amount": "$50M+ monthly",
+        "method": "Bitcoin blockchain transfer",
+        "detection_difficulty": "medium",
+        "description": "Exchange to criminal wallet transfer"
+      },
+      {
+        "id": "flow_5",
+        "source": "cex_conversion_seychelles",
+        "target": "criminal_wallet",
+        "type": "crypto_transfer",
+        "risk_assessment": "critical",
+        "estimated_amount": "$30M+ monthly",
+        "method": "Bitcoin blockchain transfer",
+        "detection_difficulty": "medium",
+        "description": "Offshore exchange to criminal wallet"
+      },
+      {
+        "id": "flow_6",
+        "source": "cex_conversion_cayman",
+        "target": "criminal_wallet",
+        "type": "crypto_transfer",
+        "risk_assessment": "critical",
+        "estimated_amount": "$20M+ monthly",
+        "method": "Bitcoin blockchain transfer",
+        "detection_difficulty": "medium",
+        "description": "Caribbean exchange to criminal wallet"
+      }
+    ],
+    "risk_heatmap": {
+      "regions": [
+        {
+          "region": "United States",
+          "risk_level": "high",
+          "risk_score": 85,
+          "primary_risks": [
+            "Systematic structuring operations",
+            "CTR threshold exploitation",
+            "Multi-state coordination"
+          ]
+        },
+        {
+          "region": "Mexico Border",
+          "risk_level": "medium_high",
+          "risk_score": 75,
+          "primary_risks": [
+            "Cross-border cash transport",
+            "Weak regulatory enforcement",
+            "Criminal network infrastructure"
+          ]
+        },
+        {
+          "region": "Malta",
+          "risk_level": "critical",
+          "risk_score": 95,
+          "primary_risks": [
+            "Cryptocurrency exchange hub",
+            "Regulatory arbitrage",
+            "Limited oversight"
+          ]
+        },
+        {
+          "region": "Seychelles",
+          "risk_level": "critical",
+          "risk_score": 98,
+          "primary_risks": [
+            "Offshore secrecy jurisdiction",
+            "Minimal reporting",
+            "Limited cooperation"
+          ]
+        },
+        {
+          "region": "Cayman Islands",
+          "risk_level": "critical",
+          "risk_score": 92,
+          "primary_risks": [
+            "Financial secrecy laws",
+            "Tax haven benefits",
+            "Limited transparency"
+          ]
+        }
+      ]
+    },
+    "temporal_patterns": [
+      {
+        "time_window": "daily",
+        "pattern": "Structured cash deposits",
+        "geographic_distribution": "United States metropolitan areas",
+        "estimated_frequency": "Multiple daily deposits",
+        "risk_indicators": ["Consistent timing", "Amount thresholds", "Geographic coordination"]
+      },
+      {
+        "time_window": "weekly",
+        "pattern": "Exchange conversion cycles",
+        "geographic_distribution": "Offshore exchange jurisdictions",
+        "estimated_frequency": "Weekly conversion batches",
+        "risk_indicators": ["Volume concentration", "Exchange rotation", "Timing optimization"]
+      },
+      {
+        "time_window": "monthly",
+        "pattern": "Criminal wallet accumulation",
+        "geographic_distribution": "Global blockchain network",
+        "estimated_frequency": "Continuous accumulation",
+        "risk_indicators": ["Progressive growth", "Sophisticated management", "Global accessibility"]
+      }
+    ],
+    "enforcement_priorities": [
+      {
+        "jurisdiction": "United States",
+        "priority_level": "immediate",
+        "required_actions": [
+          "Banking surveillance implementation",
+          "SAR comprehensive analysis",
+          "Multi-district coordination",
+          "Asset preservation orders"
+        ],
+        "coordination_requirements": [
+          "FBI Financial Crimes Task Forces",
+          "IRS Criminal Investigation",
+          "State money laundering units",
+          "Local banking partnerships"
+        ]
+      },
+      {
+        "jurisdiction": "International Offshore",
+        "priority_level": "urgent",
+        "required_actions": [
+          "MLAT request submission",
+          "Exchange cooperation agreements",
+          "Asset freezing coordination",
+          "Evidence preservation"
+        ],
+        "coordination_requirements": [
+          "Foreign Financial Intelligence Units",
+          "Diplomatic channels",
+          "Egmont Group mechanisms",
+          "Bilateral cooperation agreements"
+        ]
+      }
+    ]
+  },
+  "intelligence_summary": {
+    "confidence_level": "high",
+    "threat_assessment": "critical",
+    "operation_scale": "institutional",
+    "geographic_complexity": "multi_jurisdictional",
+    "immediate_actions": [
+      "Emergency asset freezing",
+      "International coordination",
+      "Banking surveillance",
+      "Regulatory notifications"
+    ],
+    "key_vulnerabilities": [
+      "Regulatory threshold exploitation",
+      "Jurisdictional coordination gaps",
+      "Cryptocurrency exchange oversight",
+      "Cross-border information sharing"
+    ]
+  }
+}

@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
+import { useSearchParams } from 'next/navigation'
 import AMLChatInput from '@/components/AMLChatInput'
 import AMLQuestionFlow from '@/components/AMLQuestionFlow'
 import InvestigationCanvas from '@/components/InvestigationCanvas'
@@ -18,6 +19,12 @@ export default function Home() {
   const [currentView, setCurrentView] = useState<'input' | 'questions' | 'investigation'>('input')
   const [session, setSession] = useState<AMLSessionState | null>(null)
   const [isLoading, setIsLoading] = useState(false)
+  const params = useSearchParams()
+  const demoMode = params?.get('demo') === 'true'
+
+  React.useEffect(() => {
+    if (demoMode) setCurrentView('investigation')
+  }, [demoMode])
 
   const handleInitialQuery = async (query: string) => {
     setIsLoading(true)
@@ -82,16 +89,17 @@ export default function Home() {
     setCurrentView('input')
   }
 
-  if (currentView === 'investigation' && session) {
+  if (currentView === 'investigation') {
     return (
       <main className="w-full h-screen">
         <InvestigationCanvas
-          context={{
+          demo={demoMode}
+          context={session ? {
             query: session.initialQuery,
             answers: session.answers,
             sessionId: session.sessionId,
             questions: session.questions,
-          }}
+          } : undefined}
           onBack={handleReset}
         />
       </main>

@@ -133,6 +133,18 @@ async def investigate(request: Dict[str, Any]):
                         if isinstance(content, str) and "risk:" in content.lower():
                             risk_level = extract_risk_level(content)
                             yield f"data: {json.dumps({'type': 'risk_update', 'riskLevel': risk_level})}\n\n"
+                    # On complete: persist a simple memory entry then pass through
+                    if msg_data.get("type") == "complete":
+                        try:
+                            await redis_memory.store_pattern({
+                                "type": "context",
+                                "features": {"prompt_hash": hash(prompt) & 0xFFFFFFFF},
+                                "confidence": 0.75,
+                                "success_rate": 0.8,
+                            })
+                            yield f"data: {json.dumps({'type': 'learning_update', 'message': 'Context patterns stored in Redis'})}\n\n"
+                        except Exception:
+                            pass
                     # Forward raw message for richer UIs (optional to consume)
                     yield message
 
@@ -185,6 +197,17 @@ Emit concise, incremental updates.
                         if isinstance(content, str) and "risk:" in content.lower():
                             risk_level = extract_risk_level(content)
                             yield f"data: {json.dumps({'type': 'risk_update', 'riskLevel': risk_level})}\n\n"
+                    if msg_data.get("type") == "complete":
+                        try:
+                            await redis_memory.store_pattern({
+                                "type": "context",
+                                "features": ctx,
+                                "confidence": 0.75,
+                                "success_rate": 0.8,
+                            })
+                            yield f"data: {json.dumps({'type': 'learning_update', 'message': 'Context patterns stored in Redis'})}\n\n"
+                        except Exception:
+                            pass
                     # Forward raw message for richer UIs (optional to consume)
                     yield message
 

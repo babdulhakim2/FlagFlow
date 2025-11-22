@@ -39,6 +39,12 @@ const AgentStreamPanel: React.FC<AgentStreamPanelProps> = ({ message }) => {
     if (m.type === 'map_data') {
       return { title: 'Map Data', desc: 'Route visualization updated', color: '#7c3aed' }
     }
+    if (m.type === 'learning_update') {
+      return { title: 'Memory', desc: m.message || 'Patterns stored in Redis', color: '#8b5cf6' }
+    }
+    if (m.type === 'complete') {
+      return { title: 'Complete', desc: 'Investigation finished', color: '#059669' }
+    }
     if ((m as any).content && Array.isArray((m as any).content)) {
       const content = (m as any).content
       const first = content[0]
