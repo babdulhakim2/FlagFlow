@@ -62,7 +62,7 @@ const AMLChatInput: React.FC<AMLChatInputProps> = ({
 
   return (
     <div className="relative">
-      <div className="w-full max-w-3xl mx-auto relative">
+      <div className="w-full max-w-7xl mx-auto relative">
         <form onSubmit={handleSubmit} className="flex items-center">
           <div className="relative flex-grow bg-white rounded-full border border-red-200 shadow-lg hover:shadow-xl transition-all duration-300 focus-within:ring-2 focus-within:ring-red-500 focus-within:border-red-500">
             <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
@@ -138,7 +138,7 @@ const AMLChatInput: React.FC<AMLChatInputProps> = ({
       {/* History panel */}
       {showHistory && !disabled && (
         <div
-          className="absolute top-full left-0 right-0 mt-3 mx-auto max-w-3xl bg-white rounded-xl shadow-2xl border border-gray-200 overflow-hidden animate-slideInFromBottom z-50"
+          className="absolute top-full left-0 right-0 mt-3 mx-auto max-w-7xl bg-white rounded-xl shadow-2xl border border-gray-200 overflow-hidden animate-slideInFromBottom z-50"
         >
           <div className="flex items-center justify-between p-4 bg-gradient-to-r from-red-50 to-orange-50 border-b border-gray-200">
             <div className="flex items-center space-x-2">

@@ -16,17 +16,16 @@ export const useAgentStream = () => {
   const [messages, setMessages] = useState<StreamMessage[]>([])
   const [isStreaming, setIsStreaming] = useState(false)
 
-  const startStream = useCallback(async (payload: { type: string; transactions?: any[]; context?: any }) => {
+  const startStream = useCallback(async (payload: { type: string; transactions?: any[]; context?: any; prompt?: string }) => {
     setIsStreaming(true)
     setMessages([])
 
     try {
-      const endpoint = payload.type === 'investigate_with_context'
-        ? '/api/investigate-context'
-        : '/api/investigate'
+      const base = (process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8001').replace(/\/$/, '')
+      const endpoint = `${base}/investigate`
 
       const body = payload.type === 'investigate_with_context'
-        ? { context: payload.context }
+        ? (payload.prompt ? { prompt: payload.prompt } : { context: payload.context })
         : { transactions: payload.transactions || [] }
 
       const response = await fetch(endpoint, {

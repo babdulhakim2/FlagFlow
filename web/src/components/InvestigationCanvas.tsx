@@ -23,8 +23,7 @@ import GeoIntelligenceNode from "./nodes/GeoIntelligenceNode";
 import PatternDetectionNode from "./nodes/PatternDetectionNode";
 import ChainIntelligenceNode from "./nodes/ChainIntelligenceNode";
 import TransactionUploadPanel from "./TransactionUploadPanel";
-import MapOverlay from "./MapOverlay";
-import MemoryViewerPanel from "./MemoryViewerPanel";
+import AgentStreamPanel from "./AgentStreamPanel";
 
 const nodeTypes = {
   orchestrator: OrchestratorNode,
@@ -40,10 +39,12 @@ const initialNodes: Node[] = [
     type: "orchestrator",
     position: { x: 400, y: 200 },
     data: {
-      label: "Orchestrator",
+      title: "Asking Agent",
+      label: "Asking Agent",
       status: "idle",
       findings: [],
       riskLevel: null,
+      input: "",
     },
   },
 ];
@@ -52,6 +53,7 @@ interface InvestigationContext {
   query: string;
   answers: string[];
   sessionId: string;
+  questions?: { question: string; options: string[] }[];
 }
 
 interface InvestigationCanvasProps {
@@ -62,9 +64,7 @@ interface InvestigationCanvasProps {
 export default function InvestigationCanvas({ context, onBack }: InvestigationCanvasProps) {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
-  const [showMap, setShowMap] = useState(false);
-  const [mapData, setMapData] = useState(null);
-  const [showMemory, setShowMemory] = useState(false);
+  // Clean canvas: hide map/memory/trace for now
 
   const { investigation, startInvestigation } = useInvestigationStore();
   const { messages, startStream } = useAgentStream();
@@ -94,19 +94,54 @@ export default function InvestigationCanvas({ context, onBack }: InvestigationCa
       // Start investigation with context
       startInvestigation([]);
 
-      const investigationData = {
-        query: context.query,
-        answers: context.answers,
-        sessionId: context.sessionId,
-      };
+      // Build a clear OSINT-oriented prompt from the context
+      const promptLines: string[] = [];
+      promptLines.push(
+        "The following are context details to use for an OSINT research. Use the osint-investigator agent to research the entity/counterparty and related wallets."
+      );
+      promptLines.push("");
+      promptLines.push(`Context Session: ${context.sessionId}`);
+      promptLines.push(`Query: ${context.query}`);
+      if (context.answers?.length) {
+        promptLines.push("Answers:");
+        context.answers.forEach((a, idx) => promptLines.push(`- A${idx + 1}: ${a}`));
+      }
+      if (context.questions?.length) {
+        promptLines.push("Questions:");
+        context.questions.forEach((q, idx) => {
+          promptLines.push(`- Q${idx + 1}: ${q.question}`);
+        });
+      }
+      promptLines.push("");
+      promptLines.push(
+        "Task: Begin by invoking the osint-investigator subagent with the above context (as a single string). Then continue with geo-intelligence, pattern-detector, and chain analysis if applicable. Provide concise incremental updates."
+      );
+
+      const investigationPrompt = promptLines.join("\n");
 
       startStream({
         type: "investigate_with_context",
-        context: investigationData,
+        prompt: investigationPrompt,
       });
 
       // Reset nodes to initial state
-      setNodes(initialNodes);
+      setNodes([
+        {
+          id: "orchestrator",
+          type: "orchestrator",
+          position: { x: 400, y: 200 },
+          data: {
+            title: "Asking Agent",
+            label: "Asking Agent",
+            status: "initializing",
+            findings: [],
+            riskLevel: null,
+            input: context.query,
+            questions: context.questions || [],
+            answers: context.answers || [],
+          },
+        },
+      ]);
       setEdges([]);
     }
   }, [context]);
@@ -158,9 +193,6 @@ export default function InvestigationCanvas({ context, onBack }: InvestigationCa
           return node;
         })
       );
-    } else if (lastMessage.type === "map_data") {
-      setMapData(lastMessage.data);
-      setShowMap(true);
     }
   }, [messages, setNodes, setEdges]);
 
@@ -198,50 +230,10 @@ export default function InvestigationCanvas({ context, onBack }: InvestigationCa
           </Panel>
         )}
 
-        <Panel position="top-right">
-          <div className="flex gap-2">
-            {onBack && (
-              <button
-                onClick={onBack}
-                className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
-              >
-                ← Back
-              </button>
-            )}
-            <button
-              onClick={() => setShowMap(!showMap)}
-              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-            >
-              {showMap ? "Hide" : "Show"} Map
-            </button>
-            <button
-              onClick={() => setShowMemory(!showMemory)}
-              className="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600"
-            >
-              {showMemory ? "Hide" : "Show"} Memory
-            </button>
-          </div>
-        </Panel>
-
-        {context && (
-          <Panel position="top-left">
-            <div className="bg-white p-4 rounded-lg shadow-lg border max-w-md">
-              <h3 className="font-semibold text-gray-800 mb-2">Investigation Context</h3>
-              <p className="text-sm text-gray-600 mb-3">"{context.query}"</p>
-              <div className="text-xs text-gray-500">
-                Session: {context.sessionId}
-              </div>
-            </div>
-          </Panel>
-        )}
-
-        {showMap && mapData && (
-          <MapOverlay data={mapData} onClose={() => setShowMap(false)} />
-        )}
-
-        {showMemory && (
-          <MemoryViewerPanel onClose={() => setShowMemory(false)} />
-        )}
+        {/* Bottom-center single live event toast */}
+        <div className="pointer-events-none" style={{ position: 'absolute', left: '50%', bottom: 16, transform: 'translateX(-50%)' }}>
+          <AgentStreamPanel message={messages[messages.length - 1] as any} />
+        </div>
       </ReactFlow>
     </div>
   );

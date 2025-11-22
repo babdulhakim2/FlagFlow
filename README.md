@@ -70,6 +70,18 @@ Set an API key so the follow-up generator can call Gemini (server-side only):
    cd web && npm install && npm run dev
 
 When the key is set, `/api/follow-up` returns exactly 4 questions with 4 options each, tailored for AML/crypto context (wallets, tx hashes, exchanges, bridges/mixers, jurisdictions, typicality, purpose).
+
+### Connect to ML backend (proxy mode)
+
+Set a backend URL so Next.js API routes proxy investigation streams to your ML service:
+
+1. Add to `web/.env.local`:
+
+   BACKEND_URL=http://localhost:8001
+
+2. Start your ML server (e.g., `python src/simple_main.py`) and the web app.
+
+Frontend streams directly to `${BACKEND_URL}/investigate` (SSE). If not set, local demo endpoints can be used, but the default is to call the backend directly.
 ```
 
 ## Project Structure

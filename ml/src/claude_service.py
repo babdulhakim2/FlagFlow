@@ -51,7 +51,9 @@ class ClaudeService:
                             space_id=space_id or ""
                         )
 
-                yield f"data: {json.dumps(message_dict)}\n\n"
+                # Safely JSON-encode complex SDK objects (e.g., TextBlock)
+                safe_payload = self._jsonify(message_dict)
+                yield f"data: {json.dumps(safe_payload, ensure_ascii=False)}\n\n"
 
             logger.info("Claude stream completed successfully")
             yield f"data: {json.dumps({'type': 'complete'})}\n\n"
@@ -61,6 +63,42 @@ class ClaudeService:
             yield f"data: {json.dumps({'type': 'error', 'message': str(e)})}\n\n"
 
     def _to_dict(self, message: Message) -> Dict[str, Any]:
-        if hasattr(message, '__dict__'):
-            return message.__dict__
+        # Convert SDK Message to a lightweight dict; fall back to string content
+        try:
+            if isinstance(message, dict):
+                return message  # already a dict
+            # Some SDKs expose .to_dict(); if present, use it
+            if hasattr(message, 'to_dict') and callable(getattr(message, 'to_dict')):
+                return message.to_dict()
+            if hasattr(message, '__dict__'):
+                return dict(message.__dict__)
+        except Exception:
+            pass
         return {"type": "content", "content": str(message)}
+
+    def _jsonify(self, obj: Any) -> Any:
+        """Recursively convert SDK objects (e.g., TextBlock) to JSON-serializable structures."""
+        # Primitives
+        if obj is None or isinstance(obj, (bool, int, float, str)):
+            return obj
+        # Dict-like
+        if isinstance(obj, dict):
+            return {str(k): self._jsonify(v) for k, v in obj.items()}
+        # List/tuple
+        if isinstance(obj, (list, tuple)):
+            return [self._jsonify(v) for v in obj]
+        # Known text block pattern: has 'type'=='text' and 'text' field, or attribute .text
+        tname = type(obj).__name__.lower()
+        if hasattr(obj, 'text') and ('textblock' in tname or 'block' in tname or 'text' in tname):
+            try:
+                return {"type": "text", "text": str(getattr(obj, 'text'))}
+            except Exception:
+                return str(obj)
+        # Generic object: try dict
+        if hasattr(obj, '__dict__'):
+            try:
+                return {k: self._jsonify(v) for k, v in obj.__dict__.items()}
+            except Exception:
+                return str(obj)
+        # Fallback to string
+        return str(obj)

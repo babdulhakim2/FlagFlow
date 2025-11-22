@@ -8,7 +8,7 @@ import InvestigationCanvas from '@/components/InvestigationCanvas'
 interface AMLSessionState {
   stage: 0 | 1 | 2 | 3 | 4
   initialQuery: string
-  questions: any[]
+  questions: { question: string; options: string[] }[]
   answers: string[]
   currentQuestionIndex: number
   sessionId: string
@@ -89,7 +89,8 @@ export default function Home() {
           context={{
             query: session.initialQuery,
             answers: session.answers,
-            sessionId: session.sessionId
+            sessionId: session.sessionId,
+            questions: session.questions,
           }}
           onBack={handleReset}
         />
@@ -99,7 +100,7 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-      <div className="container mx-auto px-4 py-8">
+      <div className="mx-auto px-6 py-8 max-w-7xl w-full">
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">
@@ -112,7 +113,7 @@ export default function Home() {
         </div>
 
         {currentView === 'input' && (
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-7xl w-full mx-auto">
             {/* Input stage */}
             <div className="text-center mb-8">
               <h2 className="text-2xl font-semibold text-gray-800 mb-4">
