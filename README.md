@@ -63,7 +63,6 @@ Set an API key so the follow-up generator can call Gemini (server-side only):
 
 1. Add to `web/.env.local`:
 
-   GEMINI_API_KEY=your_key_here
 
 2. Install deps and run:
 
